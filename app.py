@@ -1,7 +1,16 @@
 from flask import Flask, request, jsonify, render_template
 from youtube_transcript_api import YouTubeTranscriptApi
+import requests
 
 app = Flask(__name__)
+
+# Setup your proxy config
+PROXY = {
+    "http": "http://broqhspi:y42o6io2umet@38.153.152.244:9594",
+    "https": "http://broqhspi:y42o6io2umet@38.153.152.244:9594"
+}
+
+
 
 @app.route('/')
 def home():
@@ -13,8 +22,10 @@ def transcribe():
     video_url = data.get('url')
     video_id = extract_video_id(video_url)
     try:
-        transcript_data = YouTubeTranscriptApi.get_transcript(video_id)
-        # We only want the "text" parts, stitched together
+        transcript_data = YouTubeTranscriptApi.get_transcript(
+            video_id,
+            proxies=PROXY  # Pass the proxy here
+        )
         full_text = "\n".join(item['text'] for item in transcript_data)
         return jsonify({'transcript': full_text})
     except Exception as e:
