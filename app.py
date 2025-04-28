@@ -6,10 +6,9 @@ app = Flask(__name__)
 
 # Setup your proxy config
 PROXY = {
-    "http": "http://broqhspi:y42o6io2umet@38.153.152.244:9594",
-    "https": "http://broqhspi:y42o6io2umet@38.153.152.244:9594"
+    "http": "http://broqhspi-1:y42o6io2umet@p.webshare.io:80",
+    "https": "http://broqhspi-1:y42o6io2umet@p.webshare.io:80"
 }
-
 
 
 @app.route('/')
