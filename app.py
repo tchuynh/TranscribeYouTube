@@ -1,13 +1,18 @@
 from flask import Flask, request, jsonify, render_template
 from youtube_transcript_api import YouTubeTranscriptApi
 import requests
+from dotenv import load_dotenv
+import os
+load_dotenv()
+PROXY_CREDS = os.getenv('PROXY_CREDS')
+
 
 app = Flask(__name__)
 
 # Setup your proxy config
 PROXY = {
-    "http": "http://broqhspi-1:y42o6io2umet@p.webshare.io:80",
-    "https": "http://broqhspi-1:y42o6io2umet@p.webshare.io:80"
+    "http": f"http://{PROXY_CREDS}@p.webshare.io:80",
+    "https": f"http://{PROXY_CREDS}@p.webshare.io:80"
 }
 
 
