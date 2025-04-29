@@ -17,16 +17,54 @@
             min-height: 200px;
             margin-top: 20px;
         }
+        .timestamp {
+            color: #666;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
     <h2>YouTube Transcript Extractor</h2>
     <input type="text" id="videoUrl" placeholder="Enter YouTube Video URL" style="width: 80%;">
     <button onclick="getTranscript()">Get Transcript</button>
+    <button onclick="toggleTimestamps()" id="timestampButton">Show Timestamps</button>
 
     <div id="transcriptOutput">Transcript will appear here...</div>
 
     <script>
+        let showTimestamps = false;
+        let transcriptData = null;
+
+        function toggleTimestamps() {
+            showTimestamps = !showTimestamps;
+            const button = document.getElementById('timestampButton');
+            button.textContent = showTimestamps ? 'Hide Timestamps' : 'Show Timestamps';
+            displayTranscript();
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        function displayTranscript() {
+            const output = document.getElementById('transcriptOutput');
+            if (!transcriptData) return;
+            
+            if (showTimestamps) {
+                output.textContent = transcriptData.map(item => 
+                    `[${formatTime(item.start)}] ${item.text}`
+                ).join('\n');
+            } else {
+                output.textContent = transcriptData.map(item => item.text).join('\n');
+            }
+        }
+
         async function getTranscript() {
             const url = document.getElementById('videoUrl').value;
             const output = document.getElementById('transcriptOutput');
@@ -39,7 +77,8 @@
                 });
                 const data = await response.json();
                 if (data.transcript) {
-                    output.textContent = data.transcript;
+                    transcriptData = data.transcript;
+                    displayTranscript();
                 } else {
                     output.textContent = "Error: " + data.error;
                 }

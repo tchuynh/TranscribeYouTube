@@ -25,8 +25,7 @@ def transcribe():
             video_id,
             proxies=PROXY  # Pass the proxy here
         )
-        full_text = "\n".join(item['text'] for item in transcript_data)
-        return jsonify({'transcript': full_text})
+        return jsonify({'transcript': transcript_data})
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
